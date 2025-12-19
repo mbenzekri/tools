@@ -838,14 +838,15 @@ int main(int argc, char** argv) {
     const std::string in = argv[1];
     const std::string out_graph = argv[2];
 
-    bool emit_gfb = false;
-    std::string restriction_gfb;
+    // Objectif : --gfb génère automatiquement 3 fichiers :
+    //   <base>_node.gfb
+    //   <base>_edge.gfb
+    //   <base>_restriction.gfb
 
+    bool emit_gfb = false;
     for (int i = 3; i < argc; ++i) {
         const std::string a = argv[i];
-        if (a == "--gfb") emit_gfb = true;
-        const std::string pref = "--restriction-gfb=";
-        if (a.rfind(pref, 0) == 0) restriction_gfb = a.substr(pref.size());
+        if (a == "--fgb" || a == "-fgb") emit_gfb = true;
     }
 
     NodeUseCounter counter;
@@ -900,8 +901,10 @@ int main(int argc, char** argv) {
 
     if (emit_gfb) {
         const std::string base = base_name_no_ext(out_graph);
+
         const std::string node_path = base + "_node.gfb";
         const std::string edge_path = base + "_edge.gfb";
+        const std::string restr_path = base + "_restriction.gfb";
 
         std::vector<int64_t> osm_node_id_by_idx;
         std::vector<double> lon_by_idx;
@@ -910,10 +913,7 @@ int main(int argc, char** argv) {
 
         export_nodes_fgb(node_path, osm_node_id_by_idx, lon_by_idx, lat_by_idx);
         export_edges_fgb(edge_path, arcs, arc_geom);
-    }
-
-    if (!restriction_gfb.empty()) {
-        export_restrictions_fgb(restriction_gfb, forbidden, rels, node_index, coords_all);
+        export_restrictions_fgb(restr_path, forbidden, rels, node_index, coords_all);
     }
 
     return 0;

@@ -15,10 +15,8 @@ clean:
 	rm -f *.o
 
 test: check_graph build_graph
-	rm -f ../out/alsace.graph ../out/alsace-highway.osm.pbf 
-	osmium tags-filter ../in/alsace-latest.osm.pbf w/highway -o ../out/alsace-highway.osm.pbf
-	./build_graph ../out/alsace-highway.osm.pbf ../out/alsace.graph --gbf
+	rm -f ../out/alsace.graph ../out/alsace-highway.osm.pbf ../out/alsace_edge.fgb ../out/alsace_node.fgb ../out/alsace_restriction.fgb
+	osmium tags-filter ../in/alsace-latest.osm.pbf w/highway r/type=restriction -o ../out/alsace-highway.osm.pbf
+	./build_graph ../out/alsace-highway.osm.pbf ../out/alsace.graph --fgb
 	./check_graph ../out/alsace.graph
-#	ogr2ogr -progress -f FlatGeobuf ../out/alsace_edge.fgb ../out/alsace_edge.geojsonseq
-#	ogr2ogr -progress -f FlatGeobuf ../out/alsace_node.fgb ../out/alsace_node.geojsonseq
 	echo "Test complete."
