@@ -11,3 +11,11 @@ clean:
 	rm -f check_graph build_graph
 	rm -f *.o
 
+test: check_graph build_graph
+	rm -f ../out/alsace.graph ../out/alsace-highway.osm.pbf 
+	osmium tags-filter ../in/alsace-latest.osm.pbf w/highway -o ../out/alsace-highway.osm.pbf
+	./build_graph ../out/alsace-highway.osm.pbf ../out/alsace.graph --geojsonseq
+	./check_graph ../out/alsace.graph
+	ogr2ogr -progress -f FlatGeobuf ../out/alsace_edge.fgb ../out/alsace_edge.geojsonseq
+	ogr2ogr -progress -f FlatGeobuf ../out/alsace_node.fgb ../out/alsace_node.geojsonseq
+	echo "Test complete."
