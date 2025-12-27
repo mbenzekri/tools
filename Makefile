@@ -1,7 +1,7 @@
 GDAL_CFLAGS := $(shell gdal-config --cflags)
 GDAL_LIBS   := $(shell gdal-config --libs)
 
-all: check_graph build_graph
+all: check_graph build_graph search_graph
 	echo "Build complete."
 
 check_graph: check_graph.cpp
@@ -10,8 +10,11 @@ check_graph: check_graph.cpp
 build_graph: build_graph.cpp
 	g++ -O3 -std=c++17 build_graph.cpp $(GDAL_CFLAGS) -lz -lbz2 $(GDAL_LIBS) -o build_graph
 
+search_graph: search_graph.cpp
+	g++ -O3 -std=c++17 search_graph.cpp $(GDAL_CFLAGS) $(GDAL_LIBS) -o search_graph
+
 clean:
-	rm -f check_graph build_graph
+	rm -f check_graph build_graph search_graph
 	rm -f *.o
 
 test: check_graph build_graph

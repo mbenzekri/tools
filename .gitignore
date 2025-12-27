@@ -1,3 +1,2 @@
 *.graph
-build_graph
-check_graph
+*_graph
